@@ -5,6 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="0Harmony20">
+      <HintPath>$(BepInExGameDir)\BepInEx\core\0Harmony20.dll</HintPath>
+    </Reference>
     <Reference Include="BepInEx">
       <HintPath>$(BepInExGameDir)\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>

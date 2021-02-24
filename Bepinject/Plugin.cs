@@ -1,18 +1,19 @@
 ﻿using BepInEx;
+using BepInEx.Logging;
+using HarmonyLib;
+using Zenject;
 
 namespace Bepinject
 {
-    [BepInPlugin("dev.auros.bepinex.bepinject", "Bepinject", "1.0.0")]
+    [BepInPlugin(Constants.ID, Constants.Name, Constants.Version)]
     public class Plugin : BaseUnityPlugin
     {
+        internal static ManualLogSource Log;
+
         protected void Awake()
         {
-
-        }
-
-        protected void OnDestroy()
-        {
-
+            Log = Logger;
+            Harmony.CreateAndPatchAll(typeof(Patches), Constants.ID);
         }
     }
 }
