@@ -1,6 +1,7 @@
 ﻿using Zenject;
 using HarmonyLib;
 using UnityEngine.SceneManagement;
+using System;
 
 namespace Bepinject
 {
@@ -17,14 +18,22 @@ namespace Bepinject
 
             var context = SceneContext.Create();
             context.name = $"SceneContext ({scene.name})";
-            ZenjectManager.Install(context, scene);
             context.Run();
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ProjectContext), "Initialize")]
+        [HarmonyPatch(typeof(ProjectContext), "InstallBindings")]
         internal static void InstallProject(ref ProjectContext __instance)
         {
+            ZenjectManager.Install(__instance, __instance.gameObject.scene);
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Context), "InstallInstallers", argumentTypes: new Type[] { })]
+        internal static void RunContext(ref Context __instance)
+        {
+            if (__instance is ProjectContext)
+                return;
             ZenjectManager.Install(__instance, __instance.gameObject.scene);
         }
     }

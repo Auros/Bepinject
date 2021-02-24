@@ -9,7 +9,7 @@ namespace Bepinject
         internal readonly Assembly owner;
         internal readonly EndInstallBinder binder;
 
-        internal Zenjector(Assembly owningAssembly, InstallerBinder binder)
+        internal Zenjector(Assembly owningAssembly, EndInstallBinder binder)
         {
             this.binder = binder;
             owner = owningAssembly;
@@ -32,6 +32,15 @@ namespace Bepinject
 
             new Zenjector(asm, installerBinder);
             return installerBinder.Install(types);
+        }
+
+        public static OnBinder Pseudo(Action<Context, DiContainer>? callback = null)
+        {
+            var asm = Assembly.GetCallingAssembly();
+            var pseudoBinder = new PseudoBinder();
+
+            new Zenjector(asm, pseudoBinder);
+            return pseudoBinder.Pseudo(callback);
         }
     }
 }

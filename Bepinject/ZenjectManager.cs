@@ -22,8 +22,19 @@ namespace Bepinject
             bool isScene = context is SceneContext;
 
             SceneDecoratorContext sdc = (context as SceneDecoratorContext)!;
-            SceneContext sc = (context as SceneContext)!;
             ProjectContext pc = (context as ProjectContext)!;
+            SceneContext sc = (context as SceneContext)!;
+            
+            if (isProject)
+            {
+                context.Container.Bind<BepInLogManager>().AsSingle();
+                context.Container.Bind<BepInLog>().AsTransient().OnInstantiated<BepInLog>((ctx, bepinLogger) =>
+                {
+                    var logManager = ctx.Container.Resolve<BepInLogManager>();
+                    var logger = logManager.LoggerFromAssembly(ctx.ObjectType.Assembly);
+                    bepinLogger.Setup(logger.logger);
+                });
+            }
 
             foreach (var zenjector in zenjectors)
             {
@@ -69,13 +80,9 @@ namespace Bepinject
                         var mb = collectiveAdditiveGameObjects.FirstOrDefault(mb => mb != null && mb.GetType() == rootObjectType);
                         if (mb != null)
                         {
-                            void PreInstall()
-                            {
-                                sc.PreInstall -= PreInstall;
-                                if (!context.Container!.HasBinding(rootObjectType))
-                                    context.Container.Bind(rootObjectType).FromInstance(mb).AsSingle();
-                            }
-                            sc.PreInstall += PreInstall;
+
+                            if (!context.Container!.HasBinding(rootObjectType))
+                                context.Container.Bind(rootObjectType).FromInstance(mb).AsSingle();
                         }
                         else
                         {
