@@ -10,6 +10,12 @@ namespace Bepinject
             return this;
         }
 
+        public WithLogBinder BindFromRoot<T>()
+        {
+            rootInjectionTypes = new Type[1] { typeof(T) };
+            return this;
+        }
+
         public RootBinder When(Func<bool> when)
         {
             conditionalCallback = when;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Zenject;
 
 namespace Bepinject
 {
@@ -15,7 +16,7 @@ namespace Bepinject
             ZenjectManager.zenjectors.Add(this);
         }
 
-        public static OnBinder Install<T>()
+        public static OnBinder Install<T>() where T : InstallerBase
         {
             var asm = Assembly.GetCallingAssembly();
             var installerBinder = new InstallerBinder();
