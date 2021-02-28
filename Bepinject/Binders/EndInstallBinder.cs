@@ -1,4 +1,6 @@
-﻿using BepInEx.Logging;
+﻿using BepInEx;
+using BepInEx.Configuration;
+using BepInEx.Logging;
 using System;
 using Zenject;
 
@@ -16,5 +18,7 @@ namespace Bepinject
         internal bool onProject;
         
         internal ManualLogSource? log;
+        internal ConfigFile? config;
+        internal PluginInfo? plugin;
     }
 }

@@ -28,11 +28,25 @@ namespace Bepinject
             if (isProject)
             {
                 context.Container.Bind<BepInLogManager>().AsSingle();
+                context.Container.Bind<BepInConfigManager>().AsSingle();
+                context.Container.Bind<BepInPluginManager>().AsSingle();
                 context.Container.Bind<BepInLog>().AsTransient().OnInstantiated<BepInLog>((ctx, bepinLogger) =>
                 {
                     var logManager = ctx.Container.Resolve<BepInLogManager>();
                     var logger = logManager.LoggerFromAssembly(ctx.ObjectType.Assembly);
                     bepinLogger.Setup(logger.logger);
+                });
+                context.Container.Bind<BepInConfig>().AsTransient().OnInstantiated<BepInConfig>((ctx, bepinConfig) =>
+                {
+                    var configManager = ctx.Container.Resolve<BepInConfigManager>();
+                    var config = configManager.ConfigFromAssembly(ctx.ObjectType.Assembly);
+                    bepinConfig.Setup(config.config);
+                });
+                context.Container.Bind<BepInPluginInfo>().AsTransient().OnInstantiated<BepInPluginInfo>((ctx, bepinPlugin) =>
+                {
+                    var pluginManager = ctx.Container.Resolve<BepInPluginManager>();
+                    var plugin = pluginManager.PluginFromAssembly(ctx.ObjectType.Assembly);
+                    bepinPlugin.Setup(plugin.plugin);
                 });
             }
 

@@ -2,15 +2,15 @@
 
 namespace Bepinject
 {
-    public class RootBinder : WithLogBinder
+    public class RootBinder : WithBepInBinder
     {
-        public WithLogBinder BindFromRoot(params Type[] typesToBind)
+        public WithBepInBinder BindFromRoot(params Type[] typesToBind)
         {
             rootInjectionTypes = typesToBind;
             return this;
         }
 
-        public WithLogBinder BindFromRoot<T>()
+        public WithBepInBinder BindFromRoot<T>()
         {
             rootInjectionTypes = new Type[1] { typeof(T) };
             return this;
