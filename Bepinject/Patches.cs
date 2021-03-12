@@ -9,12 +9,15 @@ namespace Bepinject
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(SceneManager), "Internal_SceneLoaded")]
-        internal static void CreateSceneContextForScene(Scene scene)
+        internal static void CreateSceneContextForScene(Scene scene, LoadSceneMode mode)
         {
             if (!ProjectContext.HasInstance)
             {
                 _ = ProjectContext.Instance;
             }
+
+            if (mode == LoadSceneMode.Additive)
+                return;
 
             var context = SceneContext.Create();
             context.name = $"SceneContext ({scene.name})";
